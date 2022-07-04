@@ -1,4 +1,3 @@
-from re import I
 from pokemon_types import *
 import random
 import cv2
@@ -27,9 +26,14 @@ class PokemonAutomaton:
 
         return image
 
+    def _update_board(self):
+        pass
+
 
 if __name__ == "__main__":
     automaton = PokemonAutomaton()
     image = automaton.show_board()
-    cv2.imshow("image", cv2.resize(image, (512, 512), interpolation=cv2.INTER_NEAREST))
+    cv2.imshow(
+        "image", cv2.resize(image, (1024, 1024), interpolation=cv2.INTER_NEAREST)
+    )
     cv2.waitKey(0)
