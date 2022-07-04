@@ -1,6 +1,6 @@
 from enum import Enum, auto
-import re
 import numpy as np
+import matplotlib.colors
 
 
 class PokemonType(Enum):
@@ -417,7 +417,7 @@ class TypeUtils:
 
     @classmethod
     def get_color(cls, pokemon: PokemonType):
-        return cls.colours[pokemon.name]
+        return matplotlib.colors.hex2color(cls.colours[pokemon.name])
 
 
 if __name__ == "__main__":
