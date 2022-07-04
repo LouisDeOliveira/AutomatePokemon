@@ -27,18 +27,18 @@ class PokemonType(Enum):
 class TypeUtils:
     colours = {
         "normal": "#A8A77A",
-        "fire": "#EE81.30",
+        "fire": "#EE8130",
         "water": "#6390F0",
-        "electric": "#F7D02.C",
+        "electric": "#F7D02C",
         "grass": "#7AC74C",
         "ice": "#96D9D6",
-        "fighting": "#C2.2.E2.8",
-        "poison": "#A33EA1.",
-        "ground": "#E2.BF65",
+        "fighting": "#C22E28",
+        "poison": "#A33EA1",
+        "ground": "#E2BF65",
         "flying": "#A98FF3",
         "psychic": "#F95587",
-        "bug": "#A6B91.A",
-        "rock": "#B6A1.36",
+        "bug": "#A6B91A",
+        "rock": "#B6A136",
         "ghost": "#735797",
         "dragon": "#6F35FC",
         "dark": "#705746",
@@ -414,3 +414,12 @@ class TypeUtils:
     @classmethod
     def get_score(cls, attacking: PokemonType, defending: PokemonType):
         return cls.strength_matrix[attacking.value - 1][defending.value - 1]
+
+    @classmethod
+    def get_color(cls, pokemon: PokemonType):
+        return cls.colours[pokemon.name]
+
+
+if __name__ == "__main__":
+    pokemon = PokemonType.bug
+    print(TypeUtils.get_color(pokemon))
