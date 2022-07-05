@@ -6,7 +6,7 @@ from collections import Counter
 
 
 class PokemonAutomaton:
-    SIZE = 256
+    SIZE = 128
     TYPES = list(PokemonType)
     ITERATIONS = 1000
 
