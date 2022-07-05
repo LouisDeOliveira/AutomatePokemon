@@ -1,6 +1,9 @@
+from regex import R
 from pokemon_types import *
 import random
 import cv2
+
+from collections import Counter
 
 
 class PokemonAutomaton:
@@ -38,7 +41,7 @@ class PokemonAutomaton:
 
     def _find_neighbors(self, i, j):
         neighbors = []
-        to_try = [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
+        to_try = [(i + k, j + l) for k in range(-1, 2) for l in range(-1, 2)]
         for k, l in to_try:
             neighbors.append(self.board[k % self.SIZE][l % self.SIZE])
         return neighbors
@@ -49,12 +52,19 @@ class PokemonAutomaton:
 
         """
         neighbors = self._find_neighbors(i, j)
-        score = [0 for _ in range(len(neighbors))]
+        counter = Counter(neighbors)
+        unique_neighbors = list(set(neighbors))
+        score = [0 for _ in range(len(unique_neighbors))]
 
-        for idx, neighbor in enumerate(neighbors):
+        for idx, neighbor in enumerate(unique_neighbors):
             score[idx] = TypeUtils.get_score(neighbor, self.board[i][j])
 
-        return neighbors[score.index(max(score))]
+        best_neighbor = unique_neighbors[np.argmax(score)]
+
+        if counter[best_neighbor] >= 2:
+            return best_neighbor
+        else:
+            return self.board[i][j]
 
     def evolution(self):
         it = 0
