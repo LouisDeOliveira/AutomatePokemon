@@ -1,4 +1,3 @@
-from regex import R
 from pokemon_types import *
 import random
 import cv2
@@ -7,7 +6,7 @@ from collections import Counter
 
 
 class PokemonAutomaton:
-    SIZE = 128
+    SIZE = 256
     TYPES = list(PokemonType)
     ITERATIONS = 1000
 
