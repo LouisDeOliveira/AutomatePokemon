@@ -1,4 +1,3 @@
-from sklearn import neighbors
 from pokemon_types import *
 import random
 import cv2
@@ -41,11 +40,14 @@ class PokemonAutomaton:
         neighbors = []
         to_try = [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
         for k, l in to_try:
-            if 0 <= k < self.SIZE and 0 <= l < self.SIZE:
-                neighbors.append(self.board[k][l])
+            neighbors.append(self.board[k % self.SIZE][l % self.SIZE])
         return neighbors
 
     def _find_winner(self, i, j):
+        """
+        doit renvoyer le nouveau type de la case i,j en fonction de ses voisins
+
+        """
         neighbors = self._find_neighbors(i, j)
         score = [0 for _ in range(len(neighbors))]
 
