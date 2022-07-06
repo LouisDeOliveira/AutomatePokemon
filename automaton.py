@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from pokemon_types import *
 import random
 import cv2
@@ -5,19 +6,59 @@ import cv2
 from collections import Counter
 
 
+class EvolutionStrategy:
+    @abstractmethod
+    def find_neighbors(self, board, SIZE, i, j):
+        """
+        Should return a list of neighbors to consider for the strategy
+        given the coords of the current cell
+        """
+
+    @abstractmethod
+    def find_winner(self, board, SIZE, i, j):
+        """
+        Should return the new Pokemon in the cell i,j
+        """
+
+
+class SimpleStrategy(EvolutionStrategy):
+    def find_neighbors(self, board, SIZE, i, j):
+        neighbors = []
+        to_try = [(i + k, j + l) for k in range(-1, 2) for l in range(-1, 2)]
+        for k, l in to_try:
+            neighbors.append(board[k % SIZE][l % SIZE])
+        return neighbors
+
+    def find_winner(self, board, SIZE, i, j):
+        neighbors = self.find_neighbors(board, SIZE, i, j)
+        counter = Counter(neighbors)
+        unique_neighbors = list(set(neighbors))
+        score = [0 for _ in range(len(unique_neighbors))]
+
+        for idx, neighbor in enumerate(unique_neighbors):
+            score[idx] = TypeUtils.get_score(neighbor, board[i][j])
+
+        best_neighbor = unique_neighbors[np.argmax(score)]
+
+        if counter[best_neighbor] >= 2:
+            return best_neighbor
+        else:
+            return board[i][j]
+
+
 class PokemonAutomaton:
     SIZE = 128
     TYPES = list(PokemonType)
-    ITERATIONS = 1000
+    ITERATIONS = 100
 
-    def __init__(self) -> None:
+    def __init__(self, strategy: EvolutionStrategy) -> None:
         self.board = [[None for _ in range(self.SIZE)] for _ in range(self.SIZE)]
+        self.strategy = strategy
         self._fill_board()
 
     def _fill_board(
         self,
     ):
-
         for i in range(self.SIZE):
             for j in range(self.SIZE):
                 self.board[i][j] = random.choice(self.TYPES)
@@ -34,36 +75,9 @@ class PokemonAutomaton:
 
         for i in range(self.SIZE):
             for j in range(self.SIZE):
-                new_board[i][j] = self._find_winner(i, j)
+                new_board[i][j] = self.strategy.find_winner(self.board, self.SIZE, i, j)
 
         self.board = new_board
-
-    def _find_neighbors(self, i, j):
-        neighbors = []
-        to_try = [(i + k, j + l) for k in range(-1, 2) for l in range(-1, 2)]
-        for k, l in to_try:
-            neighbors.append(self.board[k % self.SIZE][l % self.SIZE])
-        return neighbors
-
-    def _find_winner(self, i, j):
-        """
-        doit renvoyer le nouveau type de la case i,j en fonction de ses voisins
-
-        """
-        neighbors = self._find_neighbors(i, j)
-        counter = Counter(neighbors)
-        unique_neighbors = list(set(neighbors))
-        score = [0 for _ in range(len(unique_neighbors))]
-
-        for idx, neighbor in enumerate(unique_neighbors):
-            score[idx] = TypeUtils.get_score(neighbor, self.board[i][j])
-
-        best_neighbor = unique_neighbors[np.argmax(score)]
-
-        if counter[best_neighbor] >= 2:
-            return best_neighbor
-        else:
-            return self.board[i][j]
 
     def evolution(self):
         it = 0
@@ -82,5 +96,5 @@ class PokemonAutomaton:
 
 
 if __name__ == "__main__":
-    automaton = PokemonAutomaton()
+    automaton = PokemonAutomaton(SimpleStrategy())
     automaton.evolution()
