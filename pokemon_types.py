@@ -420,7 +420,7 @@ class TypeUtils:
 
     @classmethod
     def hex_to_rgb(cls, hex_color):
-        return tuple(int(hex_color[i : i + 2], 16) / 255 for i in (1, 3, 5))
+        return tuple(int(hex_color[i : i + 2], 16) for i in (1, 3, 5))
 
 
 if __name__ == "__main__":
