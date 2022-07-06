@@ -49,7 +49,7 @@ class SimpleStrategy(EvolutionStrategy):
 class PokemonAutomaton:
     SIZE = 128
     TYPES = list(PokemonType)
-    ITERATIONS = 100
+    ITERATIONS = 1000
 
     def __init__(self, strategy: EvolutionStrategy) -> None:
         self.board = [[None for _ in range(self.SIZE)] for _ in range(self.SIZE)]
@@ -66,7 +66,7 @@ class PokemonAutomaton:
     def show_board(self):
         image = np.array(
             [[TypeUtils.get_color(pokemon) for pokemon in row] for row in self.board]
-        )
+        ).astype(np.uint8)
 
         return image
 
@@ -83,7 +83,7 @@ class PokemonAutomaton:
         it = 0
         while it < self.ITERATIONS:
             self._update_board()
-            image = self.show_board()
+            image = cv2.cvtColor(self.show_board(), cv2.COLOR_RGB2BGR)
             cv2.imshow(
                 "image",
                 cv2.resize(image, (1024, 1024), interpolation=cv2.INTER_NEAREST),
@@ -93,6 +93,12 @@ class PokemonAutomaton:
                 break
 
             it += 1
+        cv2.imshow(
+            "image",
+            cv2.resize(image, (1024, 1024), interpolation=cv2.INTER_NEAREST),
+        )
+        if (cv2.waitKey(0) & 0xFF) == ord("q"):
+            cv2.destroyAllWindows(image)
 
 
 if __name__ == "__main__":
