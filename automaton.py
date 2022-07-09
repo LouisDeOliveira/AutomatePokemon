@@ -2,7 +2,6 @@ from abc import abstractmethod
 from pokemon_types import *
 import random
 import cv2
-
 from collections import Counter
 
 

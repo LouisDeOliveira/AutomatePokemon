@@ -3,24 +3,24 @@ import numpy as np
 
 
 class PokemonType(Enum):
-    normal = auto()
-    fire = auto()
-    water = auto()
-    electric = auto()
-    grass = auto()
-    ice = auto()
-    fighting = auto()
-    poison = auto()
-    ground = auto()
-    flying = auto()
-    psychic = auto()
-    bug = auto()
-    rock = auto()
-    ghost = auto()
-    dragon = auto()
-    dark = auto()
-    steel = auto()
-    fairy = auto()
+    normal = 0
+    fire = 1
+    water = 2
+    electric = 3
+    grass = 4
+    ice = 5
+    fighting = 6
+    poison = 7
+    ground = 8
+    flying = 9
+    psychic = 10
+    bug = 11
+    rock = 12
+    ghost = 13
+    dragon = 14
+    dark = 15
+    steel = 16
+    fairy = 17
 
 
 class TypeUtils:
@@ -412,7 +412,7 @@ class TypeUtils:
 
     @classmethod
     def get_score(cls, attacking: PokemonType, defending: PokemonType):
-        return cls.strength_matrix[attacking.value - 1][defending.value - 1]
+        return cls.strength_matrix[attacking.value][defending.value]
 
     @classmethod
     def get_color(cls, pokemon: PokemonType):
