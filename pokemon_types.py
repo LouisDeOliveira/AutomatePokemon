@@ -424,5 +424,6 @@ class TypeUtils:
 
 
 if __name__ == "__main__":
-    pokemon = PokemonType.bug
-    print(TypeUtils.get_color(pokemon))
+    pokemon = PokemonType.electric
+    pokemon2 = PokemonType.ground
+    print(TypeUtils.get_score(pokemon2, pokemon))

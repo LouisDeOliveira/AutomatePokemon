@@ -23,7 +23,16 @@ class EvolutionStrategy:
 class SimpleStrategy(EvolutionStrategy):
     def find_neighbors(self, board, SIZE, i, j):
         neighbors = []
-        to_try = [(i + k, j + l) for k in range(-1, 2) for l in range(-1, 2)]
+        to_try = [
+            (i - 1, j),
+            (i + 1, j),
+            (i, j - 1),
+            (i, j + 1),
+            (i - 1, j - 1),
+            (i - 1, j + 1),
+            (i + 1, j - 1),
+            (i + 1, j + 1),
+        ]
         for k, l in to_try:
             neighbors.append(board[k % SIZE][l % SIZE])
         return neighbors
@@ -37,7 +46,8 @@ class SimpleStrategy(EvolutionStrategy):
         for idx, neighbor in enumerate(unique_neighbors):
             score[idx] = TypeUtils.get_score(neighbor, board[i][j])
 
-        best_neighbor = unique_neighbors[np.argmax(score)]
+        winners = np.flatnonzero(score == np.max(score))
+        best_neighbor = unique_neighbors[np.random.choice(winners)]
 
         if counter[best_neighbor] >= 2:
             return best_neighbor
